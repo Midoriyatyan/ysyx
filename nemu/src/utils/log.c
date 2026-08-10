@@ -20,7 +20,7 @@ extern uint64_t g_nr_guest_inst;
 #ifndef CONFIG_TARGET_AM
 FILE *log_fp = NULL;
 
-void init_log(const char *log_file) {
+void init_log(const char *log_file) {    
   log_fp = stdout;
   if (log_file != NULL) {
     FILE *fp = fopen(log_file, "w");

@@ -45,5 +45,5 @@ uint64_t get_time() {
 }
 
 void init_rand() {
-  srand(get_time_internal());
+  srand(get_time_internal()); //用当前时间作为种子，每次生成随机序列
 }

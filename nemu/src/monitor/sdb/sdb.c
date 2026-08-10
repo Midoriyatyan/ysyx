@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <common.h>
 
 static int is_batch_mode = false;
 
@@ -54,6 +55,13 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+
+static int cmd_si(char *args);
+
+static int cmd_info(char *args);
+
+static int cmd_x(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -64,7 +72,9 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-
+  { "si", "Pause the program after it has executed N instructions one by one", cmd_si },
+  { "info", "Print Register Status or Watchpoint Information", cmd_info },
+  { "x", "Scan memory: x N EXPR", cmd_x},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -92,6 +102,40 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+static int cmd_si(char *args){      //单步执行读入的参数 
+  int si_num = 1;
+  if(args != NULL) si_num = &args - '0'; 
+  cpu_exec(si_num);
+  return 0;
+}
+
+static int cmd_info(char *args){    //打印寄存器状态或监视点信息
+  if(args == 'r') isa_reg_display();
+  else if(args == 'w'){
+    //TODO
+  }
+  else printf("Unknown command '%s'\n", args);
+  return 0;
+}
+
+static int cmd_x(char *args){        //扫描内存
+  /* extract the first argument */
+  char *num = strtok(NULL, " ");
+  char *exp = strtok(NULL, " ");
+  if(num == NULL || exp == NULL){
+    printf("Usage: x N EXPR\n");
+    return 0;
+  }
+  
+  int n = atoi(num);
+  paddr_t addr = strtol(exp, NULL, 0);
+  for(int i = 0; i < n; i++){
+    word_t w = paddr_read(addr+i*4, 4);
+    printf(FMT_PADDR":"FMT_WORD"\n",addr+4*i, w);
+  }
+  return 0;
+}
+
 void sdb_set_batch_mode() {
   is_batch_mode = true;
 }
@@ -102,7 +146,8 @@ void sdb_mainloop() {
     return;
   }
 
-  for (char *str; (str = rl_gets()) != NULL; ) {
+  //解析gdb的命令和参数
+  for (char *str; (str = rl_gets()) != NULL; ) {   //读一行调试命令，比fgets更加智能一点
     char *str_end = str + strlen(str);
 
     /* extract the first token as the command */
@@ -125,7 +170,7 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { return; }
+        if (cmd_table[i].handler(args) < 0) { return; }   //错误处理，直接退出sdb
         break;
       }
     }

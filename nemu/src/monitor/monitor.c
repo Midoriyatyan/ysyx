@@ -33,7 +33,7 @@ static void welcome() {
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
   Log("Exercise: Please remove me in the source code and compile NEMU again.");
-  assert(0);
+  //assert(0);
 }
 
 #ifndef CONFIG_TARGET_AM
@@ -81,7 +81,7 @@ static int parse_args(int argc, char *argv[]) {
   while ( (o = getopt_long(argc, argv, "-bhl:d:p:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
-      case 'p': sscanf(optarg, "%d", &difftest_port); break;
+      case 'p': sscanf(optarg, "%d", &difftest_port); break;    //optarg指向参数，转换成整数
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
       case 1: img_file = optarg; return 0;
@@ -105,10 +105,10 @@ void init_monitor(int argc, char *argv[]) {
   parse_args(argc, argv);
 
   /* Set random seed. */
-  init_rand();
+  init_rand();         //生成随机数种子
 
   /* Open the log file. */
-  init_log(log_file);
+  init_log(log_file);       //有log_file就写，没有就写标准输出
 
   /* Initialize memory. */
   init_mem();
@@ -117,7 +117,7 @@ void init_monitor(int argc, char *argv[]) {
   IFDEF(CONFIG_DEVICE, init_device());
 
   /* Perform ISA dependent initialization. */
-  init_isa();
+  init_isa();    //将内置的客户程序读到内存，同时初始化寄存器
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
@@ -138,7 +138,7 @@ static long load_img() {
   extern char bin_start, bin_end;
   size_t size = &bin_end - &bin_start;
   Log("img size = %ld", size);
-  memcpy(guest_to_host(RESET_VECTOR), &bin_start, size);
+  memcpy(guest_to_host(RESET_VECTOR), &bin_start, size);    //把bin_start所在地址拷到第一个参数
   return size;
 }
 
