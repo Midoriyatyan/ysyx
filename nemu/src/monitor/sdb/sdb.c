@@ -18,7 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
-#include <common.h>
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -103,15 +103,16 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args){      //单步执行读入的参数 
-  int si_num = 1;
-  if(args != NULL) si_num = &args - '0'; 
-  cpu_exec(si_num);
+  int n = 1;
+  if(args != NULL) n = atoi(args);
+  cpu_exec(n);
   return 0;
 }
 
 static int cmd_info(char *args){    //打印寄存器状态或监视点信息
-  if(args == 'r') isa_reg_display();
-  else if(args == 'w'){
+  char mode = args[0];
+  if(mode == 'r') isa_reg_display();
+  else if(mode == 'w'){
     //TODO
   }
   else printf("Unknown command '%s'\n", args);
