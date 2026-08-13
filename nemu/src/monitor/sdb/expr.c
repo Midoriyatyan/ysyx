@@ -21,10 +21,15 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ = 257, TK_NUM = 258,
 
   /* TODO: Add more token types */
-
+  TK_PLUS = 43,
+  TK_MINUS = 45,
+  TK_MUL = 42,
+  TK_DIV = 47,
+  TK_LEFT_PARENTHESIS = 40,
+  TK_RIGHT_PARENTHESIS = 41,
 };
 
 static struct rule {
@@ -39,9 +44,10 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"+", }
 };
 
-#define NR_REGEX ARRLEN(rules)
+#define NR_REGEX ARRLEN(rules)   //有多少种模式
 
 static regex_t re[NR_REGEX] = {};
 
@@ -70,8 +76,8 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-static bool make_token(char *e) {
-  int position = 0;
+static bool make_token(char *e) {     //识别token
+  int position = 0;                 
   int i;
   regmatch_t pmatch;
 

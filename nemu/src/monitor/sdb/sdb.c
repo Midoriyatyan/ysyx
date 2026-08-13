@@ -62,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_p(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -75,6 +77,7 @@ static struct {
   { "si", "Pause the program after it has executed N instructions one by one", cmd_si },
   { "info", "Print Register Status or Watchpoint Information", cmd_info },
   { "x", "Scan memory: x N EXPR", cmd_x},
+  { "p", "Find the value of the expression", cmd_p},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -136,6 +139,12 @@ static int cmd_x(char *args){        //扫描内存
   }
   return 0;
 }
+
+static int cmd_p(char *args){        //表达式求值
+
+
+}
+
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
