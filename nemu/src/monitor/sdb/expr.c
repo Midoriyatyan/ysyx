@@ -24,12 +24,12 @@ enum {
   TK_NOTYPE = 256, TK_EQ = 257, TK_NUM = 258,
 
   /* TODO: Add more token types */
-  TK_PLUS = 43,
-  TK_MINUS = 45,
-  TK_MUL = 42,
-  TK_DIV = 47,
-  TK_LEFT_PARENTHESIS = 40,
-  TK_RIGHT_PARENTHESIS = 41,
+//TK_PLUS = 43,
+//TKK_MINUS = 45,
+//TK_MUL = 42,
+//TK_DIV = 47,
+//TK_LEFT_PARENTHESIS = 40,
+//TK_RIGHT_PARENTHESIS = 41,
 };
 
 static struct rule {
@@ -42,12 +42,14 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", TK_PLUS},         // plus
-  {"\\*", TK_MUL},      //mul
+  {"\\+", '+'},         // plus
+  {"\\*", '*'},      //mul
   {"==", TK_EQ},        // equal
-  {"-", TK_MINUS},      // minus
-  {"/", TK_DIV},        //divide
+  {"-", '-'},      // minus
+  {"/", '/'},        //divide
   {"\\d",TK_NUM},       //number
+  {"\\(",'('},           //left parenthesis
+  {"\\)",')'},           //right parenthesis
 };
 
 #define NR_REGEX ARRLEN(rules)   //有多少种模式
@@ -102,9 +104,17 @@ static bool make_token(char *e) {     //识别token
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        
+        Token *tokens；
         switch (rules[i].token_type) {
           default: TODO();
+          case '+' : 
+          case '-' :
+          case '*' :
+          case '/' :
+          case '(' :
+          case ')' :
+          case '' :
         }
 
         break;
@@ -128,7 +138,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+//TODO();
 
   return 0;
 }
