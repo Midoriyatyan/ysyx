@@ -42,9 +42,12 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"\\+", TK_PLUS},         // plus
+  {"\\*", TK_MUL},      //mul
   {"==", TK_EQ},        // equal
-  {"+", }
+  {"-", TK_MINUS},      // minus
+  {"/", TK_DIV},        //divide
+  {"\\d",TK_NUM},       //number
 };
 
 #define NR_REGEX ARRLEN(rules)   //有多少种模式
