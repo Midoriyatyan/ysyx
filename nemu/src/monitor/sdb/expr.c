@@ -105,16 +105,15 @@ static bool make_token(char *e) {     //识别token
          * of tokens, some extra actions should be performed.
          */
         
-        Token *tokens；
         switch (rules[i].token_type) {
-          default: TODO();
-          case '+' : 
-          case '-' :
-          case '*' :
-          case '/' :
-          case '(' :
-          case ')' :
-          case '' :
+          default:{
+            if (nr_token >= 32){
+              printf("Error:token buffer full!\n");
+              return;
+            }
+            tokens[nr_token] = 
+          }
+          
         }
 
         break;
