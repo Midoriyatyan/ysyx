@@ -1,5 +1,5 @@
-CXX := verilator
-CXXFLAGS :=  --cc --exe --build --trace-fst -j 0 -Wall
+VERILATOR := verilator
+VERILATOR_FLAGS :=  --cc --exe --build --trace-fst -j 0 -Wall
 
 CSRC := $(wildcard csrc/*.cpp)
 VSRC := $(wildcard vsrc/*.v)
@@ -16,7 +16,7 @@ all:
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	$(CXX) $(CXXFLAGS) --top-module $(TOP) $(SOURCES)
+	$(VERILATOR) $(VERILATOR_FLAGS) --top-module $(TOP) $(SOURCES)
 run:
 	$(TARGET)
 
