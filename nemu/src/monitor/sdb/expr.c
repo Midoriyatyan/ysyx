@@ -21,10 +21,15 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ = 257, TK_NUM = 258,
 
   /* TODO: Add more token types */
-
+//TK_PLUS = 43,
+//TKK_MINUS = 45,
+//TK_MUL = 42,
+//TK_DIV = 47,
+//TK_LEFT_PARENTHESIS = 40,
+//TK_RIGHT_PARENTHESIS = 41,
 };
 
 static struct rule {
@@ -38,10 +43,16 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
+  {"\\*", '*'},      //mul
   {"==", TK_EQ},        // equal
+  {"-", '-'},      // minus
+  {"/", '/'},        //divide
+  {"\\d",TK_NUM},       //number
+  {"\\(",'('},           //left parenthesis
+  {"\\)",')'},           //right parenthesis
 };
 
-#define NR_REGEX ARRLEN(rules)
+#define NR_REGEX ARRLEN(rules)   //有多少种模式
 
 static regex_t re[NR_REGEX] = {};
 
@@ -70,8 +81,8 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-static bool make_token(char *e) {
-  int position = 0;
+static bool make_token(char *e) {     //识别token
+  int position = 0;                 
   int i;
   regmatch_t pmatch;
 
@@ -93,9 +104,16 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        
         switch (rules[i].token_type) {
-          default: TODO();
+          default:{
+            if (nr_token >= 32){
+              printf("Error:token buffer full!\n");
+              return;
+            }
+            tokens[nr_token] = 
+          }
+          
         }
 
         break;
@@ -119,7 +137,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+//TODO();
 
   return 0;
 }
